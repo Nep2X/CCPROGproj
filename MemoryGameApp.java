@@ -58,17 +58,14 @@ public class MemoryGameApp {
             for (int j = 0; j < columns; j += 2) {
                 JPanel pairPanel = new JPanel(new BorderLayout());
                 
-                // First box in pair
                 inputFields[i][j] = new JTextField(10);
                 inputFields[i][j].setFont(new Font("Arial", Font.PLAIN, 16));
                 pairPanel.add(inputFields[i][j], BorderLayout.WEST);
 
-                // Arrow Label
                 JLabel arrowLabel = new JLabel("→", SwingConstants.CENTER);
                 arrowLabel.setFont(new Font("Arial", Font.BOLD, 18));
                 pairPanel.add(arrowLabel, BorderLayout.CENTER);
 
-                // Second box in pair
                 inputFields[i][j + 1] = new JTextField(10);
                 inputFields[i][j + 1].setFont(new Font("Arial", Font.PLAIN, 16));
                 pairPanel.add(inputFields[i][j + 1], BorderLayout.EAST);
@@ -142,19 +139,15 @@ public class MemoryGameApp {
                 String text = shuffledData.get(i * columns + j);
 
                 button.setFont(new Font("Arial", Font.PLAIN, 14));
-                
-                button.addActionListener(new ActionListener() {
 
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        if (!revealedButtons.contains(button)) {
-                            button.setText(text);
-                            revealedButtons.add(button);
-                            revealedTexts.add(text);
+                button.addActionListener(e -> {
+                    if (!revealedButtons.contains(button)) {
+                        button.setText(text);
+                        revealedButtons.add(button);
+                        revealedTexts.add(text);
 
-                            if (revealedButtons.size() == 2) {
-                                checkMatch();
-                            }
+                        if (revealedButtons.size() == 2) {
+                            checkMatch();
                         }
                     }
                 });
@@ -180,7 +173,6 @@ public class MemoryGameApp {
 
     private void checkMatch() {
         if (revealedTexts.get(0).equals(revealedTexts.get(1))) {
-            // Disable matched buttons
             for (JButton button : revealedButtons) {
                 button.setEnabled(false);
             }
@@ -190,15 +182,11 @@ public class MemoryGameApp {
             if (allMatched()) {
                 stopTimer();
                 JOptionPane.showMessageDialog(gameFrame, "GOOD JOB");
-                Timer delay = new Timer(3000, e -> {
-                    gameFrame.setVisible(false);
-                    createResultFrame();
-                });
-                delay.setRepeats(false);
-                delay.start();
+
+                gameFrame.setVisible(false);
+                createResultFrame();
             }
         } else {
-            // Hide unmatched buttons after a short delay
             Timer hideTimer = new Timer(500, evt -> {
                 for (JButton btn : revealedButtons) {
                     btn.setText("?");
