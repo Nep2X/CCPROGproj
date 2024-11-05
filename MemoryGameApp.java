@@ -142,16 +142,15 @@ public class MemoryGameApp {
                 String text = shuffledData.get(i * columns + j);
 
                 button.setFont(new Font("Arial", Font.PLAIN, 14));
+                
                 button.addActionListener(new ActionListener() {
-                    boolean isRevealed = false;
 
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        if (!isRevealed) {
+                        if (!revealedButtons.contains(button)) {
                             button.setText(text);
                             revealedButtons.add(button);
                             revealedTexts.add(text);
-                            isRevealed = true;
 
                             if (revealedButtons.size() == 2) {
                                 checkMatch();
@@ -181,11 +180,13 @@ public class MemoryGameApp {
 
     private void checkMatch() {
         if (revealedTexts.get(0).equals(revealedTexts.get(1))) {
+            // Disable matched buttons
             for (JButton button : revealedButtons) {
                 button.setEnabled(false);
             }
             revealedButtons.clear();
             revealedTexts.clear();
+
             if (allMatched()) {
                 stopTimer();
                 JOptionPane.showMessageDialog(gameFrame, "GOOD JOB");
@@ -197,6 +198,7 @@ public class MemoryGameApp {
                 delay.start();
             }
         } else {
+            // Hide unmatched buttons after a short delay
             Timer hideTimer = new Timer(500, evt -> {
                 for (JButton btn : revealedButtons) {
                     btn.setText("?");
